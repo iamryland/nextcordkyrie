@@ -1,0 +1,27 @@
+{
+    "key": "NzEyMTEyNTM5NjA1MTM5NTM3.XsM0ew.kqUhs3CwOUlHZlaAVP1OozLdXGo",
+    "config": {
+        "check": {
+            "yes": [
+                "driver.dev",
+                "driver.error",
+                "driver.listen",
+                "sector.manager"
+            ],
+            "no": [
+                "sector.levels",
+                "sector.mod",
+                "sector.modone"
+            ]
+        }
+    },
+    "errors": {
+        "driver.error": "Errors will not be properly handled.",
+        "driver.listen": "Events may not be handled properly",
+        "driver.dev": "Dev Access will not be functional",
+        "sector.manager": "Bot configuration will be unavailable",
+        "sector.levels": "Levels will not be updated or accessible",
+        "sector.mod": "Manual moderation commands and overrides will not work",
+        "sector.modone": "ModOne will not be usable"
+    }
+}
