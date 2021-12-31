@@ -1,5 +1,5 @@
 # _mod.py - code by Rye
-from _sector import Sector
+from ._sector import Sector
 
 
 class Mod(Sector):
@@ -9,7 +9,6 @@ class Mod(Sector):
             self.new_record()
             self.reports = None
             self.mods = None
-        self._stat = self.retrieve_db('stat')
         self._reports = self.retrieve_db('reports')
         self._mods = self.retrieve_db('mods')
 
@@ -18,15 +17,6 @@ class Mod(Sector):
 
     def __repr__(self):
         return f'Mod Features - gID: {self.gid}'
-
-    @property
-    def stat(self):
-        return self._stat
-
-    @stat.setter
-    def stat(self, stat):
-        self._stat = stat
-        self.update_db('stat', stat)
 
     @property
     def reports(self):
