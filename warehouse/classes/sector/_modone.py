@@ -1,5 +1,5 @@
 # _modone.py - code by Rye
-from _sector import Sector
+from ._sector import Sector
 
 
 class ModOne(Sector):
@@ -7,7 +7,6 @@ class ModOne(Sector):
         super().__init__(gid, 'modone')
         if self.check_db():
             self.new_record()
-        self._stat = self.retrieve_db('stat')
         self._json = self.retrieve_db('json')
         self._filters = self.retrieve_db('filters')
 
@@ -16,15 +15,6 @@ class ModOne(Sector):
 
     def __repr__(self):
         return f'ModOne-{self.gid}'
-
-    @property
-    def stat(self):
-        return self._stat
-
-    @stat.setter
-    def stat(self, stat: bool):
-        self._stat = stat
-        self.update_db('stat', stat)
 
     @property
     def json(self):

@@ -2,27 +2,26 @@
 import sqlite3
 from os import path
 import warehouse.database.access as dba
-from _sector import Sector
+from ._sector import Sector
 
 
 class Levels(Sector):
     def __init__(self, gid: int):
         self.con: sqlite3.Connection
-        self.ldb = dba.connect(f'guilds/{gid}', __name__)
         super().__init__(gid, 'levels')
+        self.ldb = dba.connect(f'guilds/{gid}', f'Levels-{self.gid}')
         if self.check_db():
             self.new_record()
-        self._stat = self.retrieve_db('stat')
         self._multi = self.retrieve_db('multi')
         self._type = self.retrieve_db('type')
         self._roles = self.retrieve_db('roles')
         self._custom = self.retrieve_db('custom')
         self._exclude = self.retrieve_db('exclude')
 
-        if path.isfile(f'../../database/guilds/{gid}.db'):
+        if path.isfile(f'warehouse/database/guilds/{gid}.db'):
             pass
         else:
-            with open('../../database/levels.sql') as file:
+            with open('warehouse/database/levels.sql') as file:
                 data = file.read()
             self.ldb.executescript(data)
             self.ldb.commit()
@@ -77,12 +76,3 @@ class Levels(Sector):
     def exclude(self, data):
         self._exclude = data
         self.update_db('exclude', data)
-
-    @property
-    def stat(self):
-        return self._stat
-
-    @stat.setter
-    def stat(self, stat):
-        self._stat = stat
-        self.update_db('stat', stat)

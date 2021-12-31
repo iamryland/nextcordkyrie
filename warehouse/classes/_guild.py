@@ -1,6 +1,10 @@
 # _guild.py - code by Rye
 import warehouse.database.access
+from . import sector
 import json
+
+
+_SECTORS = ('Mod', 'ModOne', 'Levels')
 
 
 class Guild:
@@ -18,16 +22,23 @@ class Guild:
             self.announce = announce
         else:
             self._announce: int = self.retrieve_db('announce')
-        with open('../database/master.json', 'w+') as file:
+        with open('warehouse/database/master.json', 'r') as file:
             data = json.load(file)
             if self.gid in data.keys():
                 prefix = data[f'{self.gid}']
             else:
                 prefix = '.'
                 data[f'{self.gid}'] = prefix
+        with open('warehouse/database/master.json', 'w') as file:
             json.dump(data, file)
         self._prefix = prefix
         self._cmds: str = self.retrieve_db('cmds')
+        self.sectors = []
+        for value in _SECTORS:
+            print(getattr(sector, value))
+            print(self.gid, value.lower())
+            self.sectors.append(getattr(sector, value)(self.gid))
+        print(self.sectors)
 
     def update_db(self, opt, data):
         """Updates a field in the database"""
@@ -42,7 +53,10 @@ class Guild:
         cur.execute(f"SELECT {opt} FROM config WHERE id={self.gid}")
         result = cur.fetchone()
         con.commit()
-        return result[0] if not None else None
+        if result:
+            return result[0]
+        else:
+            return None
 
     def check_db(self):
         """Checks the database for an existing record"""
@@ -56,6 +70,14 @@ class Guild:
         """Creates a new database record"""
         con = self.dba.connect('master', 'Guild')
         con.execute("INSERT INTO config (id, name) VALUES (:id, :name)", {'id': self.gid, 'name': self.name})
+
+    def get_feat(self):
+        to_send = '```Guild features:\n'
+        for value in self.sectors:
+            if value.stat == 0:
+                to_send += f'   |>- {value}\n'
+        to_send += '```'
+        return to_send
 
     @property
     def name(self) -> str:
@@ -73,7 +95,7 @@ class Guild:
     @prefix.setter
     def prefix(self, prefix: str):
         self._prefix = prefix
-        with open('../warehouse/master.json', 'w+') as file:
+        with open('warehouse/database/master.json', 'r') as file:
             data = json.load(file)
             data[f'{self.gid}'] = self._prefix
             json.dump(data, file)

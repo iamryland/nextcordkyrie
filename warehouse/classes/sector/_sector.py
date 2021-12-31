@@ -7,6 +7,7 @@ class Sector:
         self.dba = dba
         self.gid = gid
         self.table = table
+        self._stat: int = self.retrieve_db('stat')
 
     def update_db(self, opt, data):
         """Updates a single field in a database record"""
@@ -20,7 +21,10 @@ class Sector:
         cur = con.execute(f"SELECT {opt} FROM {self.table} WHERE id={self.gid}")
         result = cur.fetchone()
         con.commit()
-        return result[0] if not None else None
+        if result:
+            return result[0]
+        else:
+            return None
 
     def new_record(self):
         """Creates a new database record"""
@@ -35,3 +39,12 @@ class Sector:
             return False
         else:
             return True
+
+    @property
+    def stat(self) -> int:
+        return self._stat
+
+    @stat.setter
+    def stat(self, stat: int):
+        self._stat = stat
+        self.update_db('stat', stat)

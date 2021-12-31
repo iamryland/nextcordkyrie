@@ -9,22 +9,23 @@ import functools
 import json
 import asyncio
 from os import path
-
+import warehouse.database.access as dba
 import nextcord.ext.commands
 from nextcord.ext import commands
+import warehouse.classes as w_classes
 
 
 class SnowBot(commands.Bot):
     def __init__(self):
         self.retrieve_prefix = functools.partial(self.get_bot_prefix)
         super().__init__(command_prefix=self.retrieve_prefix)
-        self.__status: str = 'and Listening'
         self.wh = 'warehouse'
+        self.__status = 'and Listening'
         self.support: Support = Support()
         self.preload = self.support.preload()
         self.loop: asyncio.AbstractEventLoop = asyncio.new_event_loop()
-        # self.dba
-        # self.cguilds
+        self.dba: dba = dba
+        self.cguilds: list = []
 
     def startup(self):
         self.add_cog(DevLoader(self))
@@ -38,10 +39,10 @@ class SnowBot(commands.Bot):
 
         async def runner(self_):
             try:
-                await self.start(self_.support.get_token())
+                await self_.start(self_.support.get_token())
             finally:
-                if not self.is_closed():
-                    await self.close()
+                if not self_.is_closed():
+                    await self_.close()
 
         def stop_loop_on_completion(stop_loop):
             self.loop.stop()
@@ -64,6 +65,15 @@ class SnowBot(commands.Bot):
                     record = '.'
             pre = [record, f'{record} ']
             return commands.when_mentioned_or(pre[0], pre[1])(bot, message)
+
+    def get_cguild(self, gid: int):
+        for guild in self.cguilds:
+            if guild.gid == gid:
+                return guild
+            else:
+                continue
+        # Shouldn't return None but hey
+        return None
 
 
 class Support:
