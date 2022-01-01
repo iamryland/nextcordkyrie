@@ -72,7 +72,7 @@ class Guild:
         con.execute("INSERT INTO config (id, name) VALUES (:id, :name)", {'id': self.gid, 'name': self.name})
 
     def get_feat(self):
-        to_send = '```Guild features:\n'
+        to_send = f'```Guild features for [ {self.name} ]:<{self.gid}>:\n'
         for value in self.sectors:
             if value.stat == 0:
                 to_send += f'   |>- {value}\n'
