@@ -10,6 +10,10 @@ class Levels(Sector):
         self.con: sqlite3.Connection
         super().__init__(gid, 'levels')
         self.ldb = dba.connect(f'guilds/{gid}', f'Levels-{self.gid}')
+        with open('warehouse/database/levels.sql') as file:
+            data = file.read()
+        self.ldb.executescript(data)
+        self.ldb.commit()
         if self.check_db():
             self.new_record()
         self._multi = self.retrieve_db('multi')
@@ -17,14 +21,6 @@ class Levels(Sector):
         self._roles = self.retrieve_db('roles')
         self._custom = self.retrieve_db('custom')
         self._exclude = self.retrieve_db('exclude')
-
-        if path.isfile(f'warehouse/database/guilds/{gid}.db'):
-            pass
-        else:
-            with open('warehouse/database/levels.sql') as file:
-                data = file.read()
-            self.ldb.executescript(data)
-            self.ldb.commit()
 
     def __str__(self):
         return 'Levels'
