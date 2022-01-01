@@ -28,6 +28,15 @@ class Execution(commands.Cog):
         for guild in self.bot.guilds:
             self.bot.cguilds.append(cGuild(guild.id, guild.name, self.dba))
 
+    @commands.Cog.listener()
+    async def on_guild_update(self, before, after):
+        if before.name != after.name:
+            for cg in self.bot.cguilds:
+                if cg.gid == after.id:
+                    cg.name = after.name
+                else:
+                    continue
+
     @commands.command()
     @commands.is_owner()
     async def features(self, ctx):
