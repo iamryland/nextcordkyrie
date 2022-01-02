@@ -35,10 +35,7 @@ class Guild:
         self._cmds: str = self.retrieve_db('cmds')
         self.sectors = []
         for value in _SECTORS:
-            print(getattr(sector, value))
-            print(self.gid, value.lower())
             self.sectors.append(getattr(sector, value)(self.gid))
-        print(self.sectors)
 
     def update_db(self, opt, data):
         """Updates a field in the database"""
