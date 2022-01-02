@@ -20,7 +20,6 @@ class SnowBot(commands.Bot):
         self.retrieve_prefix = functools.partial(self.get_bot_prefix)
         super().__init__(command_prefix=self.retrieve_prefix)
         self.wh = 'warehouse'
-        self.__status = 'and Listening'
         self.support: Support = Support()
         self.preload = self.support.preload()
         self.loop: asyncio.AbstractEventLoop = asyncio.new_event_loop()
@@ -34,24 +33,7 @@ class SnowBot(commands.Bot):
                 self.load_extension(item)
             except nextcord.ext.commands.ExtensionNotFound:
                 pass
-
-        self.loop = asyncio.new_event_loop()
-
-        async def runner(self_):
-            try:
-                await self_.start(self_.support.get_token())
-            finally:
-                if not self_.is_closed():
-                    await self_.close()
-
-        def stop_loop_on_completion(stop_loop):
-            self.loop.stop()
-        future = asyncio.ensure_future(runner(self), loop=self.loop)
-        future.add_done_callback(stop_loop_on_completion)
-        try:
-            self.loop.run_forever()
-        except KeyboardInterrupt:
-            print("Exiting Event Loop")
+        self.run(self.support.get_token())
 
     def get_bot_prefix(self, bot, message):
         if not message.guild:
@@ -109,6 +91,8 @@ class Support:
         item: str
         for item in check['yes']:
             if path.isfile(f'{item.replace(".", "/")}.py'):
+                if item.endswith('dev'):
+                    continue
                 final.append(item)
             else:
                 print(f'ERROR - {item}: ' + data['errors'][item])
@@ -176,6 +160,11 @@ class DevLoader(commands.Cog, command_attrs=dict(hidden=True)):
         await msg.delete()
 
 
-# Starts the bot :D
-discordBot = SnowBot()
-discordBot.startup()
+try:
+    # Starts the bot :D
+    discordBot = SnowBot()
+    discordBot.startup()
+except RuntimeError:
+    pass
+finally:
+    exit()
