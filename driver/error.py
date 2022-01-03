@@ -11,7 +11,7 @@ async def handle(ctx, error: Exception, bot):
     if ctx.message.content.startswith('..'):
         pass
     else:
-        embed = nextcord.Embed(description='', color=nextcord.Color.blurple())
+        embed = nextcord.Embed(title='Error Message', description='', color=nextcord.Color.blurple())
         if isinstance(error, commands.CommandError):
             if isinstance(error, commands.UserInputError):
                 if isinstance(error, commands.MissingRequiredArgument):
