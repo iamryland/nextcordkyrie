@@ -7,6 +7,7 @@ class Sector:
         self.dba = dba
         self.gid = gid
         self.table = table
+        self.key = table
         self._stat: int = self.retrieve_db('stat')
 
     def update_db(self, opt, data):
