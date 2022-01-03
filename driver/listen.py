@@ -40,13 +40,6 @@ class Execution(commands.Cog):
                 else:
                     continue
 
-    @commands.command()
-    @commands.is_owner()
-    async def features(self, ctx):
-        cg = self.bot.get_cguild(ctx.guild.id)
-        await ctx.send(cg.get_feat())
-        await ctx.message.delete()
-
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         user = await self.bot.fetch_user(int(self.bot.owner_id))
