@@ -56,7 +56,7 @@ class Manager(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
-    async def update(self, ctx):
+    async def config(self, ctx):
         """Enables or disables bot features for the server"""
         cg: cGuild
         item: Sector
