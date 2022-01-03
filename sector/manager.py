@@ -67,7 +67,10 @@ class Manager(commands.Cog):
         for item in cg.sectors:
             pre_select[item.key] = item.stat
         view = UpdateView(pre_select)
-        msg = await ctx.send('Please choose an option', view=view)
+        msg = await ctx.send(f"**Bot Configuration**\n\n"
+                             f"** - Mod Features:** Allows the bot to run moderation commands\n"
+                             f"** - ModOne:** The Advanced Auto-Mod features\n"
+                             f"** - Levels:** The leveling system, which ranks users based on activity.", view=view)
         await view.wait()
         for item in cg.sectors:
             item.stat = view.values[item.key]
