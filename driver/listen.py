@@ -3,8 +3,6 @@
 # This file will contain the discord event listeners
 # and the response the bot will have to them
 from nextcord.ext import commands
-
-import runtime
 from runtime import SnowBot
 from warehouse.classes import cGuild
 import nextcord
