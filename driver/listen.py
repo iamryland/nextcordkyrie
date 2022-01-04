@@ -15,10 +15,9 @@ class Execution(commands.Cog):
         self.bot: SnowBot = bot
         self.dba = self.bot.dba
         self.__status = 'and Listening'
-        self.guild_join_msg = '***HEWWO?!? :sparkles:***\nI am Kyrie... yeah that\'s it. :D\n\n' \
-                              'Oh yeah! I enabled some default settings, and I also set this channel' \
-                              ' to be my channel to send important messages! You can check the "sectors"' \
-                              ' enabled by default by doing `.guild_feat`.'
+        self.guild_join_msg = '***HEWWO?!? :sparkles:***\nI am Kyrie :D Nice to be joining you!\n\n' \
+                              '*By default, I have my features disabled, except some basic ones ofc.*\n' \
+                              '*You can enable more features by doing* ` .config `!!'
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -55,7 +54,7 @@ class Execution(commands.Cog):
                     announce = channel
                     break
         if announce:
-            await announce.send(self.guild_join_msg)
+            await announce.send(embed=nextcord.Embed(title='', description=self.guild_join_msg, color=nextcord.Color.dark_red()))
             self.bot.cguilds.append(cGuild(guild.id, guild.name, self.dba, announce=announce.id))
 
 
