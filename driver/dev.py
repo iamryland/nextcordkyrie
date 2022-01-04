@@ -1,5 +1,7 @@
 # dev.py - code by Rye
 # This contains Dev tools accessible through discord
+import os
+import sys
 import time
 import runtime
 import asyncio
@@ -125,6 +127,7 @@ class Dev(commands.Cog, command_attrs=dict(hidden=True, )):
         print('Logged out, closing program..', end='\r')
         await asyncio.sleep(1)
         print('Logged out, closing program...', end='\n')
+        sys.stderr = open('stderr.log', 'w')
         if self.bot.is_closed():
             return
         try:
