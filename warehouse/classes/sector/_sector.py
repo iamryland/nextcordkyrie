@@ -4,22 +4,23 @@ import warehouse.database.access as dba
 
 class Sector:
     def __init__(self, gid, table):
-        self.dba = dba
+        self._dba = dba
         self.gid = gid
-        self.table = table
+        self._table = table
         self.key = table
-        self._stat: int = self.retrieve_db('stat')
+        self.docs = {}
+        self._stat: int = self._retrieve_db('stat')
 
-    def update_db(self, opt, data):
+    def _update_db(self, opt, data):
         """Updates a single field in a database record"""
-        con = self.dba.connect('master', 'master')
-        con.execute(f"UPDATE {self.table} SET {opt}=:data WHERE id={self.gid}", {'data': data})
+        con = self._dba.connect('master', 'master')
+        con.execute(f"UPDATE {self._table} SET {opt}=:data WHERE id={self.gid}", {'data': data})
         con.commit()
 
-    def retrieve_db(self, opt):
+    def _retrieve_db(self, opt):
         """Retrieves data from a single field in a database record"""
-        con = self.dba.connect('master', 'master')
-        cur = con.execute(f"SELECT {opt} FROM {self.table} WHERE id={self.gid}")
+        con = self._dba.connect('master', 'master')
+        cur = con.execute(f"SELECT {opt} FROM {self._table} WHERE id={self.gid}")
         result = cur.fetchone()
         con.commit()
         if result:
@@ -27,15 +28,15 @@ class Sector:
         else:
             return None
 
-    def new_record(self):
+    def _new_record(self):
         """Creates a new database record"""
-        con = self.dba.connect('master', 'master')
-        con.execute(f"INSERT INTO {self.table} (id, stat) VALUES (:id, :stat)", {'id': self.gid, 'stat': 1})
+        con = self._dba.connect('master', 'master')
+        con.execute(f"INSERT INTO {self._table} (id, stat) VALUES (:id, :stat)", {'id': self.gid, 'stat': 1})
         con.commit()
 
-    def check_db(self):
+    def _check_db(self):
         """Checks the database for an existing record"""
-        result = self.retrieve_db('id')
+        result = self._retrieve_db('id')
         if result:
             return False
         else:
@@ -48,4 +49,4 @@ class Sector:
     @stat.setter
     def stat(self, stat: int):
         self._stat = stat
-        self.update_db('stat', stat)
+        self._update_db('stat', stat)
