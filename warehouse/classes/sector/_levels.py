@@ -9,18 +9,24 @@ class Levels(Sector):
     def __init__(self, gid: int):
         self.con: sqlite3.Connection
         super().__init__(gid, 'levels')
-        self.ldb = dba.connect(f'guilds/{gid}', f'Levels-{self.gid}')
+        self._ldb = dba.connect(f'guilds/{gid}', f'Levels-{self.gid}')
         with open('warehouse/database/levels.sql') as file:
             data = file.read()
-        self.ldb.executescript(data)
-        self.ldb.commit()
-        if self.check_db():
-            self.new_record()
-        self._multi = self.retrieve_db('multi')
-        self._type = self.retrieve_db('type')
-        self._roles = self.retrieve_db('roles')
-        self._custom = self.retrieve_db('custom')
-        self._exclude = self.retrieve_db('exclude')
+        self._ldb.executescript(data)
+        self._ldb.commit()
+        if self._check_db():
+            self._new_record()
+        self._multi = self._retrieve_db('multi')
+        self._type = self._retrieve_db('type')
+        self._roles = self._retrieve_db('roles')
+        self._custom = self._retrieve_db('custom')
+        self._exclude = self._retrieve_db('exclude')
+        self.docs = {'type': 'The type of leveling system used',
+                     'multi': 'The multiplier for the server',
+                     'roles': 'Level-specific roles',
+                     'custom': 'Any custom data saved',
+                     'exclude': 'Channels that do not gain XP'
+                     }
 
     def __str__(self):
         return 'Levels'
@@ -29,13 +35,13 @@ class Levels(Sector):
         return f'Levels - gID: {self.gid}'
 
     @property
-    def ltype(self):
+    def type(self):
         return self._type
 
-    @ltype.setter
-    def ltype(self, data):
+    @type.setter
+    def type(self, data):
         self._type = data
-        self.update_db('type', data)
+        self._update_db('type', data)
 
     @property
     def multi(self):
@@ -44,7 +50,7 @@ class Levels(Sector):
     @multi.setter
     def multi(self, data):
         self._multi = data
-        self.update_db('multi', data)
+        self._update_db('multi', data)
 
     @property
     def roles(self):
@@ -53,7 +59,7 @@ class Levels(Sector):
     @roles.setter
     def roles(self, data):
         self._roles = data
-        self.update_db('roles', data)
+        self._update_db('roles', data)
 
     @property
     def custom(self):
@@ -62,7 +68,7 @@ class Levels(Sector):
     @custom.setter
     def custom(self, data):
         self._custom = data
-        self.update_db('custom', data)
+        self._update_db('custom', data)
 
     @property
     def exclude(self):
@@ -71,4 +77,4 @@ class Levels(Sector):
     @exclude.setter
     def exclude(self, data):
         self._exclude = data
-        self.update_db('exclude', data)
+        self._update_db('exclude', data)
