@@ -13,7 +13,7 @@ class Execution(commands.Cog):
         self.bot: SnowBot = bot
         self.dba = self.bot.dba
         self.__status = 'and Listening'
-        self.guild_join_msg = '***HEWWO?!? :sparkles:***\nI am Kyrie :D Nice to be joining you!\n\n' \
+        self.guild_join_msg = '***HEWWO?!? :sparkles:***\n**I am Kyrie :D Nice to be joining you!**\n\n' \
                               '*By default, I have my features disabled, except some basic ones ofc.*\n' \
                               '*You can enable more features by doing* ` .config `!!'
 
