@@ -5,10 +5,11 @@ from ._sector import Sector
 class ModOne(Sector):
     def __init__(self, gid: int):
         super().__init__(gid, 'modone')
-        if self.check_db():
-            self.new_record()
-        self._json = self.retrieve_db('json')
-        self._filters = self.retrieve_db('filters')
+        if self._check_db():
+            self._new_record()
+        self._json = self._retrieve_db('json')
+        self._filters = self._retrieve_db('filters')
+        self.docs = {'json': 'Various auto-moderation data', 'filters': 'The status of the chat filters'}
 
     def __str__(self):
         return 'ModOne'
@@ -23,7 +24,7 @@ class ModOne(Sector):
     @json.setter
     def json(self, data):
         self._json = data
-        self.update_db('json', data)
+        self._update_db('json', data)
 
     @property
     def filters(self):
@@ -32,4 +33,4 @@ class ModOne(Sector):
     @filters.setter
     def filters(self, data):
         self._filters = data
-        self.update_db('filters', data)
+        self._update_db('filters', data)
