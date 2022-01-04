@@ -2,6 +2,7 @@
 
 # This file will contain basic bot configuration commands
 # that server mods and admins can use to customize their experience
+import inspect
 import asyncio
 import nextcord
 from nextcord.ext import commands
@@ -15,14 +16,14 @@ button_styles = [nextcord.ButtonStyle.success,
 
 class ConfigButton(nextcord.ui.Button):
     def __init__(self, label, key, value):
-        super().__init__(style=button_styles[value], label=label)
+        super().__init__(style=button_styles[value], label=label, row=0)
         self.key = key
         self.value = value
 
     async def callback(self, interaction: nextcord.Interaction):
         if interaction.guild:
             if not interaction.permissions.manage_guild:
-                await interaction.response.send_message('You must have `Manage Guild` permissions to interact!', ephemeral=True)
+                await interaction.response.send_message('You must have `Manage Server` permissions to interact!', ephemeral=True)
                 return
             view: UpdateView = self.view
             self.value = 1 if self.value == 0 else 0
@@ -33,19 +34,19 @@ class ConfigButton(nextcord.ui.Button):
 
 class UpdateView(nextcord.ui.View):
     def __init__(self, pre_select: dict):
-        super().__init__()
         self.values = {'mod': pre_select['mod'],
                        'modone': pre_select['modone'],
                        'levels': pre_select['levels']}
-        self.legend = {'mod': 'Mod Features', 'modone': 'ModOne', 'levels': 'Levels'}
+        self.legend = {'mod': 'Mods', 'modone': 'ModOne', 'levels': 'Levels'}
         self.end = False
+        super().__init__()
         for k, v in self.values.items():
             self.add_item(ConfigButton(self.legend[k], k, v))
 
-    @nextcord.ui.button(label='Confirm', style=nextcord.ButtonStyle.blurple, row=1)
+    @nextcord.ui.button(label='Save', style=nextcord.ButtonStyle.blurple)
     async def confirm_config(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         button.disabled = True
-        button.label = 'Confirmed!'
+        button.label = 'Saved!'
         await interaction.response.edit_message(view=self)
         self.stop()
 
@@ -56,31 +57,59 @@ class Manager(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
-    async def config(self, ctx):
+    async def config(self, ctx, *, sub_command=None):
         """Enables or disables bot features for the server"""
         cg: cGuild
         item: Sector
         await ctx.message.delete()
         cg = self.bot.get_cguild(int(ctx.guild.id))
 
-        pre_select = {}
+        keys = []
         for item in cg.sectors:
-            pre_select[item.key] = item.stat
-        view = UpdateView(pre_select)
-        msg = await ctx.send(f"**Bot Configuration**\n\n"
-                             f"** - Mod Features:** Allows the bot to run moderation commands\n"
-                             f"** - ModOne:** The Advanced Auto-Mod features\n"
-                             f"** - Levels:** The leveling system, which ranks users based on activity.", view=view)
-        await view.wait()
-        for item in cg.sectors:
-            item.stat = view.values[item.key]
-        config = await ctx.send(f"```Config Saved!\n"
-                                f" - Mod Features: {'Enabled' if view.values['mod'] == 0 else 'Disabled'}\n"
-                                f" - ModOne Bot: {'Enabled' if view.values['modone'] == 0 else 'Disabled'}\n"
-                                f" - Levels: {'Enabled' if view.values['levels'] == 0 else 'Disabled'}```")
-        await msg.delete()
-        await asyncio.sleep(5)
-        await config.delete()
+            keys.append(item.key)
+
+        if sub_command is None:
+            pre_select = {}
+            for item in cg.sectors:
+                pre_select[item.key] = item.stat
+            view = UpdateView(pre_select)
+            embed = nextcord.Embed(title='Bot Configuration',
+                                   description=f"** - Mod Features:** Allows the bot to run moderation commands\n"
+                                               f"** - ModOne:** The Advanced Auto-Mod features\n"
+                                               f"** - Levels:** The leveling system, which ranks users based on activity.\n\n"
+                                               f"Click or Tap on the buttons to Enable (Green) or Disable (Grey) features.\n"
+                                               f"Once finished, press ` Save ` to save the configuration.",
+                                   color=nextcord.Color.dark_red())
+            msg = await ctx.send(embed=embed, view=view)
+            await view.wait()
+            for item in cg.sectors:
+                item.stat = view.values[item.key]
+            config = await ctx.send(f"```Config Saved!\n"
+                                    f" - Mod Features: {'Enabled' if view.values['mod'] == 0 else 'Disabled'}\n"
+                                    f" - ModOne Bot: {'Enabled' if view.values['modone'] == 0 else 'Disabled'}\n"
+                                    f" - Levels: {'Enabled' if view.values['levels'] == 0 else 'Disabled'}```")
+            await asyncio.sleep(1)
+            await msg.delete()
+            await asyncio.sleep(5)
+            await config.delete()
+        if sub_command in keys:
+            sector = None
+            options = {}
+            for item in cg.sectors:
+                if item.key == sub_command:
+                    sector = item
+                    for val in dir(sector):
+                        if not val.startswith('_') and val not in ['key', 'gid', 'stat', 'docs']:
+                            options[val] = sector.docs[val]
+                    break
+                else:
+                    continue
+            string = ''
+            for k, v in options.items():
+                string += f'\n - **{k}:** {v}'
+            await ctx.send(embed=nextcord.Embed(title=f'{sector} Configuration',
+                                                description=string,
+                                                color=nextcord.Color.dark_red()))
 
     @commands.command()
     @commands.is_owner()
