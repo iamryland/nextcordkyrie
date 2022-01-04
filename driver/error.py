@@ -131,12 +131,8 @@ async def handle(ctx, error: Exception, bot):
             print(error.__cause__)
             print(error.with_traceback(error.__traceback__))
         # await ctx.send(error)
-        if ctx.message:
-            await asyncio.sleep(5)
-        if ctx.message:
-            await ctx.message.delete()
-        await asyncio.sleep(10)
-        await msg.delete()
+        await ctx.message.delete(delay=1)
+        await msg.delete(delay=10)
 
 
 class ErrorHandler(commands.Cog):
