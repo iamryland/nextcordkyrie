@@ -11,7 +11,8 @@
             "no": [
                 "sector.levels",
                 "sector.mod",
-                "sector.modone"
+                "sector.modone",
+                "sector.games"
             ]
         }
     },
