@@ -137,8 +137,7 @@ class DevLoader(commands.Cog, command_attrs=dict(hidden=True)):
             msg = await ctx.send('`Successfully Enabled the Developer Tools.`')
             self.toggle = True
         await ctx.message.delete()
-        await asyncio.sleep(3)
-        await msg.delete()
+        await msg.delete(delay=3)
 
     @commands.command()
     @commands.is_owner()
@@ -146,8 +145,7 @@ class DevLoader(commands.Cog, command_attrs=dict(hidden=True)):
         """Show's whether the Dev module is loaded"""
         await ctx.message.delete()
         msg = await ctx.send('`Current Dev status: {}`'.format('Enabled' if self.toggle else 'Disabled'))
-        await asyncio.sleep(3)
-        await msg.delete()
+        await msg.delete(delay=3)
 
     @commands.command()
     @commands.is_owner()
@@ -156,8 +154,7 @@ class DevLoader(commands.Cog, command_attrs=dict(hidden=True)):
         self.bot.reload_extension('driver.elevate')
         await ctx.message.delete()
         msg = await ctx.send('`Reloaded the Dev Tools module`')
-        await asyncio.sleep(5)
-        await msg.delete()
+        await msg.delete(delay=3)
 
 
 try:
