@@ -7,7 +7,7 @@ import nextcord
 from nextcord.ext import commands
 
 
-async def handle(ctx, error: Exception, bot):
+async def handle(ctx, error, bot):
     if ctx.message.content.startswith('..'):
         pass
     else:
@@ -128,6 +128,8 @@ async def handle(ctx, error: Exception, bot):
                 embed.add_field(name=ext_err, value=f'The extension (** {error.name} **) **was NOT found!**')
         msg = await ctx.send(embed=embed)
         if 'Dev' in bot.cogs.keys():
+            print(error.args)
+            print(error)
             print(error.__cause__)
             print(error.with_traceback(error.__traceback__))
         # await ctx.send(error)
