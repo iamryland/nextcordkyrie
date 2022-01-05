@@ -70,28 +70,23 @@ class Manager(commands.Cog):
 
         if sub_command is None:
             pre_select = {}
+            description = ''
             for item in cg.sectors:
                 pre_select[item.key] = item.stat
+                description += f"** - {item}:** {item.__doc__}\n"
+            description += f"\nClick or Tap on the buttons to Enable (Green) or Disable (Grey) features."\
+                           f"\nOnce finished, press ` Save ` to save the configuration."
             view = UpdateView(pre_select)
-            embed = nextcord.Embed(title='Bot Configuration',
-                                   description=f"** - Mod Features:** Allows the bot to run moderation commands\n"
-                                               f"** - ModOne:** The Advanced Auto-Mod features\n"
-                                               f"** - Levels:** The leveling system, which ranks users based on activity.\n\n"
-                                               f"Click or Tap on the buttons to Enable (Green) or Disable (Grey) features.\n"
-                                               f"Once finished, press ` Save ` to save the configuration.",
-                                   color=nextcord.Color.dark_red())
+            embed = nextcord.Embed(title='Bot Configuration', description=description, color=nextcord.Color.dark_red())
             msg = await ctx.send(embed=embed, view=view)
             await view.wait()
+            message = ''
             for item in cg.sectors:
                 item.stat = view.values[item.key]
-            config = await ctx.send(f"```Config Saved!\n"
-                                    f" - Mod Features: {'Enabled' if view.values['mod'] == 0 else 'Disabled'}\n"
-                                    f" - ModOne Bot: {'Enabled' if view.values['modone'] == 0 else 'Disabled'}\n"
-                                    f" - Levels: {'Enabled' if view.values['levels'] == 0 else 'Disabled'}```")
-            await asyncio.sleep(1)
-            await msg.delete()
-            await asyncio.sleep(5)
-            await config.delete()
+                message += f" - {item}: {'Enabled' if view.values[item.key] == 0 else 'Disabled'}\n"
+            config = await ctx.send(f"```Config Saved!\n{message}```")
+            await msg.delete(delay=1)
+            await config.delete(delay=5)
         if sub_command in keys:
             sector = None
             options = {}
