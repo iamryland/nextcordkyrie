@@ -39,7 +39,7 @@ class Execution(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        user = await self.bot.fetch_user(int(self.bot.owner_id))
+        user = await self.bot.fetch_user(333958799620833282)
         user_dm = await user.create_dm()
         await user_dm.send(f'I joined a new server! Yay!\nJoined server: {guild.name}\nGuild ID: {guild.id}')
         print(f'{self.bot.user} joined a new Guild! It joined: ({guild.name})(ID:{guild.id})')
@@ -54,6 +54,10 @@ class Execution(commands.Cog):
         if announce:
             await announce.send(embed=nextcord.Embed(title='', description=self.guild_join_msg, color=nextcord.Color.dark_red()))
             self.bot.cguilds.append(cGuild(guild.id, guild.name, self.dba, announce=announce.id))
+
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        pass
 
 
 def setup(bot):
