@@ -3,12 +3,14 @@ from ._sector import Sector
 
 
 class Mod(Sector):
+    """Allows the bot to run moderation commands"""
     def __init__(self, gid: int):
         super().__init__(gid, 'mod')
         if self._check_db():
             self._new_record()
             self.reports = None
             self.mods = None
+            self.stat = self._retrieve_db('stat')
         self._reports = self._retrieve_db('reports')
         self._mods = self._retrieve_db('mods')
         self.docs = {'reports': 'The reports channel for mod events', 'mods': 'The roles allowed to use moderation commands'}

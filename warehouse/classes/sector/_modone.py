@@ -3,10 +3,12 @@ from ._sector import Sector
 
 
 class ModOne(Sector):
+    """The Advanced Auto-Mod features"""
     def __init__(self, gid: int):
         super().__init__(gid, 'modone')
         if self._check_db():
             self._new_record()
+            self.stat = self._retrieve_db('stat')
         self._json = self._retrieve_db('json')
         self._filters = self._retrieve_db('filters')
         self.docs = {'json': 'Various auto-moderation data', 'filters': 'The status of the chat filters'}
