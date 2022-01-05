@@ -6,6 +6,7 @@ from ._sector import Sector
 
 
 class Levels(Sector):
+    """The leveling system, which ranks users based on activity."""
     def __init__(self, gid: int):
         self.con: sqlite3.Connection
         super().__init__(gid, 'levels')
@@ -16,6 +17,7 @@ class Levels(Sector):
         self._ldb.commit()
         if self._check_db():
             self._new_record()
+            self.stat = self._retrieve_db('stat')
         self._multi = self._retrieve_db('multi')
         self._type = self._retrieve_db('type')
         self._roles = self._retrieve_db('roles')
