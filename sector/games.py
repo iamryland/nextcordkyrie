@@ -60,7 +60,8 @@ class Games(commands.Cog):
                                            f'It is month {month} of the year {curr[0]}.',
                                color=nextcord.Color.blurple())
         embed.set_footer(text='RyTime Info', icon_url=self.bot.user.avatar.url)
-        await ctx.send(embed=embed)
+        msg = await ctx.send(embed=embed)
+        await msg.delete(delay=15)
 
     @commands.command()
     async def tictactoe(self, ctx):
