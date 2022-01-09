@@ -32,7 +32,7 @@ class Guild:
         with open('warehouse/database/master.json', 'w') as file:
             json.dump(data, file)
         self._prefix = prefix
-        self._cmds: str = self.retrieve_db('cmds')
+        self._cmds = self.retrieve_db('cmds')
         self.sectors = []
         for value in _SECTORS:
             self.sectors.append(getattr(sector, value)(self.gid))
@@ -98,19 +98,19 @@ class Guild:
             json.dump(data, file)
 
     @property
-    def announce(self) -> int:
+    def announce(self):
         return self._announce
 
     @announce.setter
-    def announce(self, announce: int):
+    def announce(self, announce):
         self._announce = announce
         self.update_db('announce', announce)
 
     @property
-    def cmds(self) -> str:
+    def cmds(self):
         return self._cmds
 
     @cmds.setter
-    def cmds(self, cmds: str):
+    def cmds(self, cmds):
         self._cmds = cmds
         self.update_db('cmds', cmds)

@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS "levels" (
 	"id" INTEGER UNIQUE,
 	"stat" INTEGER,
 	"type" TEXT,
-	"multi"	INTEGER,
+	"multi"	TEXT,
 	"roles"	TEXT,
 	"custom" TEXT,
 	"exclude" TEXT,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS "modone" (
 CREATE TABLE IF NOT EXISTS "config" (
 	"id" INTEGER NOT NULL UNIQUE,
 	"name" TEXT,
-	"announce" INTEGER,
+	"announce" TEXT,
 	"cmds" TEXT,
 	PRIMARY KEY("id")
 );
