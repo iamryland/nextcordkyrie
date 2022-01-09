@@ -1,0 +1,11 @@
+{
+    "*key*": {
+        "value": "*state/value*",
+        "doc": "*documentation*",
+        "type": "select",
+        "options": {
+            "*name*": "*option*",
+            "*name2*": "*option2*"
+        }
+    }
+}
