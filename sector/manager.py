@@ -2,7 +2,6 @@
 
 # This file will contain basic bot configuration commands
 # that server mods and admins can use to customize their experience
-import inspect
 import asyncio
 import nextcord
 from nextcord.ext import commands
