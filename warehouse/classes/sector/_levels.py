@@ -18,11 +18,6 @@ class Levels(Sector):
         if self._check_db():
             self._new_record()
             self.stat = self._retrieve_db('stat')
-        self._multi = self._retrieve_db('multi')
-        self._type = self._retrieve_db('type')
-        self._roles = self._retrieve_db('roles')
-        self._custom = self._retrieve_db('custom')
-        self._exclude = self._retrieve_db('exclude')
         self.docs = {'type': 'The type of leveling system used',
                      'multi': 'The multiplier for the server',
                      'roles': 'Level-specific roles',
@@ -38,45 +33,40 @@ class Levels(Sector):
 
     @property
     def type(self):
-        return self._type
+        return self._retrieve_db('type')
 
     @type.setter
     def type(self, data):
-        self._type = data
         self._update_db('type', data)
 
     @property
     def multi(self):
-        return self._multi
+        return self._retrieve_db('multi')
 
     @multi.setter
     def multi(self, data):
-        self._multi = data
         self._update_db('multi', data)
 
     @property
     def roles(self):
-        return self._roles
+        return self._retrieve_db('roles')
 
     @roles.setter
     def roles(self, data):
-        self._roles = data
         self._update_db('roles', data)
 
     @property
     def custom(self):
-        return self._custom
+        return self._retrieve_db('custom')
 
     @custom.setter
     def custom(self, data):
-        self._custom = data
         self._update_db('custom', data)
 
     @property
     def exclude(self):
-        return self._exclude
+        return self._retrieve_db('exclude')
 
     @exclude.setter
     def exclude(self, data):
-        self._exclude = data
         self._update_db('exclude', data)

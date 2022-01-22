@@ -9,8 +9,6 @@ class ModOne(Sector):
         if self._check_db():
             self._new_record()
             self.stat = self._retrieve_db('stat')
-        self._json = self._retrieve_db('json')
-        self._filters = self._retrieve_db('filters')
         self.docs = {'json': 'Various auto-moderation data', 'filters': 'The status of the chat filters'}
 
     def __str__(self):
@@ -21,18 +19,16 @@ class ModOne(Sector):
 
     @property
     def json(self):
-        return self._json
+        return self._retrieve_db('json')
 
     @json.setter
     def json(self, data):
-        self._json = data
         self._update_db('json', data)
 
     @property
     def filters(self):
-        return self._filters
+        return self._retrieve_db('filters')
 
     @filters.setter
     def filters(self, data):
-        self._filters = data
         self._update_db('filters', data)

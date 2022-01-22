@@ -9,7 +9,6 @@ class Sector:
         self._table = table
         self.key = table
         self.docs = {}
-        self._stat: int = self._retrieve_db('stat')
 
     def _update_db(self, opt, data):
         """Updates a single field in a database record"""
@@ -44,9 +43,8 @@ class Sector:
 
     @property
     def stat(self) -> int:
-        return self._stat
+        return self._retrieve_db('stat')
 
     @stat.setter
     def stat(self, stat: int):
-        self._stat = stat
         self._update_db('stat', stat)

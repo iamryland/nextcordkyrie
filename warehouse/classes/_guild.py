@@ -11,9 +11,7 @@ class Guild:
     def __init__(self, gid: int, name: str, db: warehouse.database.access, announce=None, check=True):
         self.dba = db
         self.gid = gid
-        self._name = name
         self.__check = check
-        self._announce = None
         if self.check_db():
             self.new_record()
         else:
@@ -32,7 +30,6 @@ class Guild:
         with open('warehouse/database/master.json', 'w') as file:
             json.dump(data, file)
         self._prefix = prefix
-        self._cmds = self.retrieve_db('cmds')
         self.sectors = []
         for value in _SECTORS:
             self.sectors.append(getattr(sector, value)(self.gid))
@@ -78,11 +75,10 @@ class Guild:
 
     @property
     def name(self) -> str:
-        return self._name
+        return self.retrieve_db('name')
 
     @name.setter
     def name(self, name: str):
-        self._name = name
         self.update_db('name', name)
 
     @property
@@ -99,18 +95,16 @@ class Guild:
 
     @property
     def announce(self):
-        return self._announce
+        return self.retrieve_db('announce')
 
     @announce.setter
     def announce(self, announce):
-        self._announce = announce
         self.update_db('announce', announce)
 
     @property
     def cmds(self):
-        return self._cmds
+        return self.retrieve_db('cmds')
 
     @cmds.setter
     def cmds(self, cmds):
-        self._cmds = cmds
         self.update_db('cmds', cmds)
