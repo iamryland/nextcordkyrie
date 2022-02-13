@@ -1,9 +1,18 @@
-# snow
-### Kyrie - discord bot application
+# Kyrie - Discord Bot Application
 
 This repository contains the code for a discord bot I manage in my free time.
-It has various uses including moderation, member ranks, and auto roles.
+Currently, this bot is not public and cannot be invited to discord servers.
 
-Currently this bot is in alpha stage, and is not for public use.
-However, the code is hosted here for resume purposes and for those who are curious on development or would like to pitch in 
-comments on my code to view it.
+Upon alpha release, the bot will have the following features:
+ - Mod Assistance
+ - User Leveling
+ - MEE6 Migration
+ - TicTacToe :D
+
+Some planned features and ideas are:
+ - Auto Moderation
+ - Server-Specific Memes
+ - Global Memes
+ - Global Leveling (Across servers the bot is in)
+ - Automatic Roles
+ - Role Selectors
