@@ -93,8 +93,8 @@ class Manager(commands.Cog):
                 if item.key == sub_command:
                     sector = item
                     for val in dir(sector):
-                        if not val.startswith('_') and val not in ['key', 'gid', 'stat', 'docs']:
-                            options[val] = sector.docs[val]
+                        if not val.startswith('_') and val not in ['key', 'gid', 'stat', 'docs', 'values']:
+                            options[val] = sector.values[val].doc
                     break
                 else:
                     continue
