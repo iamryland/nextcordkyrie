@@ -1,0 +1,7 @@
+{
+    "type": "The type of leveling system used",
+    "multi": "The multiplier for the server",
+    "roles": "Level-specific roles",
+    "custom": "Any custom data saved",
+    "exclude": "Channels that do not gain XP"
+}
