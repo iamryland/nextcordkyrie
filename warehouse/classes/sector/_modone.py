@@ -1,5 +1,6 @@
 # _modone.py - code by Rye
-from ._sector import Sector
+import json
+from ._sector import Sector, ValueHolder
 
 
 class ModOne(Sector):
@@ -9,7 +10,10 @@ class ModOne(Sector):
         if self._check_db():
             self._new_record()
             self.stat = self._retrieve_db('stat')
-        self.docs = {'json': 'Various auto-moderation data', 'filters': 'The status of the chat filters'}
+        with open('warehouse/database/json/modone.json') as file:
+            data = json.load(file)
+            for k, v in data.items():
+                self.values[k] = ValueHolder(self._retrieve_db(k), k, v)
 
     def __str__(self):
         return 'ModOne'
@@ -19,16 +23,22 @@ class ModOne(Sector):
 
     @property
     def json(self):
-        return self._retrieve_db('json')
+        value = self._retrieve_db('json')
+        self.values['json'].value = value
+        return value
 
     @json.setter
     def json(self, data):
+        self.values['json'].value = data
         self._update_db('json', data)
 
     @property
     def filters(self):
-        return self._retrieve_db('filters')
+        value = self._retrieve_db('filters')
+        self.values['filters'].value = value
+        return value
 
     @filters.setter
     def filters(self, data):
+        self.values['filters'].value = data
         self._update_db('filters', data)
