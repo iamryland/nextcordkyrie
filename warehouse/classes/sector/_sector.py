@@ -2,13 +2,20 @@
 import warehouse.database.access as dba
 
 
+class ValueHolder:
+    def __init__(self, value, key, doc):
+        self.value = value
+        self.key = key
+        self.doc = doc
+
+
 class Sector:
     def __init__(self, gid, table):
         self._dba = dba
         self.gid = gid
         self._table = table
         self.key = table
-        self.docs = {}
+        self.values = {}
 
     def _update_db(self, opt, data):
         """Updates a single field in a database record"""
