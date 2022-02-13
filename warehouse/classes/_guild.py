@@ -11,6 +11,7 @@ class Guild:
     def __init__(self, gid: int, name: str, db: warehouse.database.access, announce=None, check=True):
         self.dba = db
         self.gid = gid
+        self.name = name
         self.__check = check
         if self.check_db():
             self.new_record()
