@@ -32,11 +32,9 @@ class ConfigButton(nextcord.ui.Button):
 
 
 class UpdateView(nextcord.ui.View):
-    def __init__(self, pre_select: dict):
-        self.values = {'mod': pre_select['mod'],
-                       'modone': pre_select['modone'],
-                       'levels': pre_select['levels']}
-        self.legend = {'mod': 'Mods', 'modone': 'ModOne', 'levels': 'Levels'}
+    def __init__(self, values: dict, legend: dict):
+        self.values = values
+        self.legend = legend
         self.end = False
         super().__init__()
         for k, v in self.values.items():
@@ -69,13 +67,15 @@ class Manager(commands.Cog):
 
         if sub_command is None:
             pre_select = {}
+            top_config = {}
             description = ''
             for item in cg.sectors:
+                top_config[item.key] = str(item)
                 pre_select[item.key] = item.stat
                 description += f"** - {item}:** {item.__doc__}\n"
             description += f"\nClick or Tap on the buttons to Enable (Green) or Disable (Grey) features."\
                            f"\nOnce finished, press ` Save ` to save the configuration."
-            view = UpdateView(pre_select)
+            view = UpdateView(pre_select, top_config)
             embed = nextcord.Embed(title='Bot Configuration', description=description, color=nextcord.Color.dark_red())
             msg = await ctx.send(embed=embed, view=view)
             await view.wait()
@@ -88,19 +88,24 @@ class Manager(commands.Cog):
             await config.delete(delay=5)
         if sub_command in keys:
             sector = None
+            string = ''
             options = {}
+            # sub_values = {}
+            # sub_legend = {}
             for item in cg.sectors:
                 if item.key == sub_command:
                     sector = item
                     for val in dir(sector):
                         if not val.startswith('_') and val not in ['key', 'gid', 'stat', 'docs', 'values']:
                             options[val] = sector.values[val].doc
+                            # sub_values[val] = sector.values[val].value
                     break
                 else:
                     continue
-            string = ''
             for k, v in options.items():
+                # sub_legend[k] = k
                 string += f'\n - **{k}:** {v}'
+            # view = UpdateView(sub_values, sub_legend)
             await ctx.send(embed=nextcord.Embed(title=f'{sector} Configuration',
                                                 description=string,
                                                 color=nextcord.Color.dark_red()))
